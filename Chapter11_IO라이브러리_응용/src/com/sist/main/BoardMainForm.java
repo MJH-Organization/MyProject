@@ -250,6 +250,7 @@ implements ActionListener,MouseListener
             vo.setContent(bUpdate.ta.getText());
             vo.setPwd(pwd);
             vo.setHit(Integer.parseInt(bDetail.hit.getText()));
+            vo.setRegdate(new Date());
             
             boolean bCheck=bm.boardUpdate(vo);
             
@@ -261,7 +262,7 @@ implements ActionListener,MouseListener
             }
             else
             {
-                
+                bUpdate.pwdPf.setText("");
                 card.show(getContentPane(), "DETAIL");
                 detailPrint(vo);
             }
@@ -289,6 +290,7 @@ implements ActionListener,MouseListener
             }
             else
             {
+                bDelete.pf.setText("");
                 card.show(getContentPane(), "LIST");
                 listPrint();
             }
