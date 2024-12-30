@@ -24,7 +24,7 @@ implements ActionListener
         rb2=new JRadioButton("여자");
         // 반드시 => 그룹처리 => HTML에서 그룹처리
         ButtonGroup bg=new ButtonGroup();
-        bg.add(rb1); bg.add(b2);
+        bg.add(rb1); bg.add(rb2);
         
         // default 선택
         rb1.setSelected(true);
@@ -60,6 +60,13 @@ implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
-        
+        if(e.getSource()==b2)
+        {
+            System.exit(0);
+        }
+        else if(e.getSource()==b1)
+        {
+            
+        }
     }
 }

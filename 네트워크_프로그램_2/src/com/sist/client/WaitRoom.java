@@ -10,6 +10,8 @@ public class WaitRoom extends JPanel {
     JTextArea ta;
     JTextField tf;
     JButton b1,b2,b3,b4,b5,b6;
+    JScrollBar bar;
+    
     
     public WaitRoom()
     {
@@ -26,7 +28,22 @@ public class WaitRoom extends JPanel {
 
         String[] col2= {"아이디", "이름", "성별", "위치"};
         String[][] row2=new String[0][4];
-        model2=new DefaultTableModel(row2,col2);
+        model2=new DefaultTableModel(row2,col2)
+        {
+            // 익명의 클래스 => 상속없이 오버라이딩이 가능
+            /*
+             *      내부 클래스
+             *      --------
+             *      1. 멤버클래스    => 서버
+             *      2. 익명의 클래스
+             */
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+            
+        };
         table2=new JTable(model2);
         
         JScrollPane js2=new JScrollPane(table2);
@@ -37,6 +54,7 @@ public class WaitRoom extends JPanel {
         ta=new JTextArea();
         JScrollPane js3=new JScrollPane(ta);
         ta.setEditable(false);
+        bar=js3.getVerticalScrollBar();
         js3.setBounds(465, 15, 300, 260);
         add(js3);
         

@@ -45,7 +45,7 @@ public class Server implements Runnable{
     // 2. 서버 가동
     private ServerSocket ss;
     // 3. 접속시 => 연결 라인 => PORT
-    private static int PORT=4321;
+    private final int PORT=4321;
     
     // 4. 서버 가동 => ServerSocket 초기화
     public Server()
@@ -55,6 +55,7 @@ public class Server implements Runnable{
             ss=new ServerSocket(PORT);
             // bind => 개통 (유심)
             // listen() => 대기
+            System.out.println("Server Start...");
         }catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -66,9 +67,30 @@ public class Server implements Runnable{
         // TODO Auto-generated method stub
         Server server=new Server();
         new Thread(server).start();
-        System.out.println("서버가 시작되었습니다.");
 
     }
+    
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        
+        try
+        {
+            while(true)
+            {
+                Socket s=ss.accept();
+                // 접속시에 발신자 정보를 받는다
+                Client client=new Client(s);
+                // => 각 쓰레드로 전송 => 각자 따로 통신이 가능
+                client.start();
+            }
+            
+        }catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+    }
+
     // 클라이언트마다 통신을 담당
     // Server가 가지고 있는 모든 자원(변수,메서드)을 사용할 수 있다
     // => 쓰레드는 데이터가 없고 => 데이터 공유
@@ -155,9 +177,56 @@ public class Server implements Runnable{
                             }
                         }
                         break;
-                    case Function.MYLOG:    // 로그인을 요청했다면
-                        break;
                     case Function.WAITCHAT:    // 로그인을 요청했다면
+                    {
+                        messageAll(Function.WAITCHAT+"|["+name+"] "+st.nextToken());
+                    }
+                        break;
+                    case Function.EXIT:
+                    {
+                        messageAll(Function.EXIT+"|"+id);
+                        messageAll(Function.WAITCHAT+"|[알림] "+name+"님이 퇴장하셨습니다");
+                        messageTo(Function.MYEXIT+"|");
+                        // 행위를 한 사람 => this
+                        for(int i=0; i<waitVc.size();i++)
+                        {
+                            Client c=waitVc.get(i);
+                            if(c.id.equals(id))
+                            {
+                                waitVc.remove(i);
+                                try
+                                {
+                                    in.close();
+                                    out.close();
+                                }catch(Exception ex) {}
+                                break;
+                            }
+                        }
+                    }
+                        break;
+                    /*
+                     *      서버의 기능
+                     *      1. 저장
+                     *      2. 수정
+                     *      3. 읽기 / 쓰기 (송수신)
+                     *      4. 검색    
+                     */
+                    case Function.INFO:
+                    {
+                        String yid=st.nextToken();
+                        for(Client c:waitVc)
+                        {
+                            if(yid.equals(c.id))
+                            {
+                                messageTo(Function.INFO+"|"
+                                        +c.id+"|"
+                                        +c.name+"|"
+                                        +c.sex+"|"
+                                        +c.pos);
+                            }
+                            break;
+                        }
+                    }
                         break;
                     }
                 }
@@ -192,23 +261,5 @@ public class Server implements Runnable{
         }
     }
     
-    @Override
-    public void run() {
-        // TODO Auto-generated method stub
-        
-        try
-        {
-            while(true)
-            {
-                Socket s=ss.accept();
-                // 접속시에 발신자 정보를 받는다
-                // => 각 쓰레드로 전송 => 각자 따로 통신이 가능
-            }
-            
-        }catch (Exception e) {
-            // TODO: handle exception
-        }
-        
-    }
 
 }
