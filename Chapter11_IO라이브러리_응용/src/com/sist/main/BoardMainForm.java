@@ -106,10 +106,11 @@ implements ActionListener,MouseListener
         // frame의 내용을 update 한다
         // 수정 요청
         bDetail.no.setText(String.valueOf(vo.getNo()));
-        bDetail.name.setText(vo.getName());
-//        bDetail.suUpdate.nameTf.setText(vo.getName());
-//        bUpdate.subTf.setText(vo.getSubject());
-//        bUpdate.ta.setText(vo.getContent());
+        bDetail.sub.setText(vo.getSubject());
+        bDetail.ta.setText(vo.getContent());
+        bDetail.hit.setText(String.valueOf(vo.getHit()));
+        bDetail.day.setText(new SimpleDateFormat("yyyy-MM-dd").format(vo.getRegdate()));
+
     }
 
             
@@ -247,8 +248,8 @@ implements ActionListener,MouseListener
             vo.setName(bUpdate.nameTf.getText());
             vo.setSubject(bUpdate.subTf.getText());
             vo.setContent(bUpdate.ta.getText());
-            //vo.setPwd(String.valueOf(bUpdate.pwdPf.getPassword()));
-            //vo.setHit(Integer.parseInt(bDetail.hit.getText()));
+            vo.setPwd(pwd);
+            vo.setHit(Integer.parseInt(bDetail.hit.getText()));
             
             boolean bCheck=bm.boardUpdate(vo);
             
@@ -262,7 +263,7 @@ implements ActionListener,MouseListener
             {
                 
                 card.show(getContentPane(), "DETAIL");
-                listPrint();
+                detailPrint(vo);
             }
           
        }

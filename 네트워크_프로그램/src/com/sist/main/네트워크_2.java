@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class 네트워크_2  extends JFrame
 implements ActionListener
 {
+    final static int MAX_VALUE=1000;
     JProgressBar[]  bar=new JProgressBar[5];
     JButton b1,b2;
     BarThread[] bt=new BarThread[5];
@@ -32,7 +33,7 @@ implements ActionListener
             bar[i].setBackground(Color.white);
             bar[i].setForeground(color[i]);
             bar[i].setMinimum(0);
-            bar[i].setMaximum(100);
+            bar[i].setMaximum(MAX_VALUE);
             bar[i].setStringPainted(true);
             p.add(bar[i]);
         }
@@ -108,14 +109,14 @@ implements ActionListener
         {
             try
             {
-                for(int i=0; i<=1000; i++)
+                for(int i=0; i<=MAX_VALUE; i++)
                 {
                     bar[index].setValue(i);
                     // bar => 실제 값
                     int a=(int)(Math.random()*300); // 일시정지
                     Thread.sleep(a);
                     
-                    if(i==100)
+                    if(i==MAX_VALUE)
                     {
                         rank++;
                         interrupt(); // 쓰레드 종료
