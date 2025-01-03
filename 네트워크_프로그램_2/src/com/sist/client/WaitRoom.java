@@ -1,5 +1,4 @@
 package com.sist.client;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.*;
