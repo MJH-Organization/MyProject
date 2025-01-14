@@ -17,7 +17,7 @@ public class MemberDAO {
         try
         {
            // ojdc8.jar
-           Class.forName("oracle.jdbc.driver.OraclaDriver"); 
+           Class.forName("oracle.jdbc.driver.OracleDriver"); 
         }catch(Exception ex)
         {
             
