@@ -1,8 +1,11 @@
-package com.sist.dao;
+package com.sist.main;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
+import com.sist.dao.MusicDAO;
+import com.sist.vo.MusicVO;
 
 public class GenieMusicMain {
 
