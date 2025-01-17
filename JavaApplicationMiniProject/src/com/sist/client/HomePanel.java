@@ -2,6 +2,8 @@ package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import java.awt.event.*;
 import com.sist.commons.ImageChange;
@@ -23,16 +25,22 @@ implements MouseListener,ActionListener
     int curpage=1;
     int totalpage=0;
     
+    JTable table;
+    DefaultTableModel model;
+    TableColumn column;
+    
     // 데이터베이스 연동 => FoodDAO
     FoodDAO dao=FoodDAO.newInstance();
+    JLabel titleLa=new JLabel("인기 맛집 Top10", JLabel.CENTER);
     
     public HomePanel(ControlPanel cp)
     {
         // JPanel => FlowLayout ...
-        setLayout(new BorderLayout());
+        setLayout(null);
         this.cp=cp;
         pan.setLayout(new GridLayout(3,4,5,5));
-        add("Center",pan);
+        pan.setBounds(20, 15, 550, 500);
+        add(pan);
         
         b1=new JButton("이전");
         b2=new JButton("다음");
@@ -40,11 +48,48 @@ implements MouseListener,ActionListener
         JPanel p=new JPanel();
         p.add(b1); p.add(la); p.add(b2);
         // add => 코딩 순서로 배치
-        add("South",p);
-        print();
+        p.setBounds(20, 530, 550, 35);
+        add(p);
+        
+        String[] col= {"","업체명","평정"};
+        Object[][] row=new Object[0][3];
+        model=new DefaultTableModel(row,col)
+        {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                // TODO Auto-generated method stub
+                return getValueAt(0, columnIndex).getClass();
+            }
+        };
+        table=new JTable(model);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setRowHeight(35);
+        JScrollPane js=new JScrollPane(table);
+        for(int i=0;i<col.length;i++) {
+            column=table.getColumnModel().getColumn(i);
+            if(i==0)
+                column.setPreferredWidth(100);
+            else if(i==1)
+                column.setPreferredWidth(150);
+            else if(i==2)
+                column.setPreferredWidth(80);
+        }
+        // 20, 595, 550, 35
+        titleLa.setBounds(580, 15, 230, 45);
+        titleLa.setFont(new Font("맑은 고딕",Font.BOLD,25));
+        add(titleLa);
+        js.setBounds(580, 70, 230, 450);
+        add(js);
         
         b1.addActionListener(this); // 이전
         b2.addActionListener(this); // 다음
+        print();
     }
     // 초기화
     public void init()
@@ -69,7 +114,7 @@ implements MouseListener,ActionListener
             try
             {
                 URL url=new URL(vo.getPoster());
-                Image image=ImageChange.getImage(new ImageIcon(url), 200, 150);
+                Image image=ImageChange.getImage(new ImageIcon(url), 130, 180);
                 imgs[i]=new JLabel(new ImageIcon(image));
                 imgs[i].setToolTipText(vo.getName()+"^"+vo.getFno());
                 pan.add(imgs[i]);
@@ -81,10 +126,49 @@ implements MouseListener,ActionListener
         }
         la.setText(curpage+" page / "+totalpage+" pages");
         
+        for(int i=model.getRowCount()-1;i>=0;i--)
+        {
+            model.removeRow(i);
+        }
+        
+        List<FoodVO> tList=dao.foodTop10();
+        for(FoodVO vo:tList)
+        {
+            try
+            {
+                URL url=new URL("https://www.menupan.com"+vo.getPoster());
+                Image image=ImageChange.getImage(new ImageIcon(url), 35, 35);
+                Object[] data= {
+                        new ImageIcon(image),
+                        vo.getName(),
+                        String.valueOf(vo.getScore())
+                };
+                model.addRow(data);
+            }catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
+            
+        }
+        
     }
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
+        for(int i=0;i<imgs.length;i++)
+        {
+            if(e.getSource()==imgs[i])
+            {
+                if(e.getClickCount()==2)
+                {
+                    String fno=imgs[i].getToolTipText();
+                    fno=fno.substring(fno.lastIndexOf("^")+1);
+                    FoodVO vo=dao.foodDetailData(Integer.parseInt(fno));
+                    cp.fdp.detailPrint(1, vo);
+                    cp.card.show(cp, "DETAIL");
+                }
+            }
+        }
         
     }
     @Override

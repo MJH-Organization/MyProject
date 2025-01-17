@@ -105,6 +105,39 @@ public class MemberDAO {
           }
           return vo;
       }
+      // 호
+      public MemberVO memberInfo(String id)
+      {
+          MemberVO vo=new MemberVO();
+          try
+          {
+              getConnection();
+              String sql="SELECT name,sex,email,address, "
+                      +"regdate,birthday "
+                      +"FROM member "
+                      +"WHERE id=?";
+              ps=conn.prepareStatement(sql);
+              ps.setString(1, id);
+              ResultSet rs=ps.executeQuery();
+              rs.next();
+              vo.setName(rs.getString(1));
+              vo.setSex(rs.getString(2));
+              vo.setEmail(rs.getString(3));
+              vo.setAddress(rs.getString(4));
+              vo.setRegdate(rs.getDate(5));
+              vo.setBirthday(rs.getDate(6));
+              rs.close();
+          }catch(Exception ex)
+          {
+              ex.printStackTrace();
+          }
+          finally
+          {
+              disConnection();
+             
+          }
+          return vo;
+      }
       // 2. 회원가입
       // 3. 회원수정
       // 4. 회원탈퇴
