@@ -1,4 +1,4 @@
-package com.sist.vo;
+package com.sist.vo; 
 
 public class FoodVO {
     private int fno,hit;
