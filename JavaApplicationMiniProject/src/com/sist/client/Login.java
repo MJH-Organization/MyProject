@@ -31,7 +31,7 @@ public class Login extends JFrame{
         p.add(b2);
         p.setBounds(10, 90, 285, 35);
         add(p);
-        setBounds(620,320,330,170);
+        setBounds(400,300,330,170);
         setVisible(true); // 화면 출력
         //la2.setBounds(10, 15, 80, 30);
 

@@ -38,11 +38,11 @@ implements ActionListener,Runnable,MouseListener
 	public ClientMainFrame()
 	{
 		setLayout(null);	// 사용자 정의	=> 직접 배치
-		mf.setBounds(210, 15, 800, 50);
+		mf.setBounds(10, 15, 800, 50);
 		add(mf);
-		cp.setBounds(10, 70, 1220, 590);
+		cp.setBounds(10, 70, 820, 570);
 		add(cp);
-		setSize(1250,700);
+		setSize(850,700);
 //		setVisible(true);
 		
 		// 등록
@@ -55,6 +55,7 @@ implements ActionListener,Runnable,MouseListener
 		mf.b2.addActionListener(this); // 맛집
 		mf.b3.addActionListener(this); // 검색
 		mf.b7.addActionListener(this); // 뉴스
+		mf.b5.addActionListener(this); // 커뮤니티
 		
         // chat => Socket
 		cp.cp.tf.addActionListener(this);
@@ -252,6 +253,10 @@ implements ActionListener,Runnable,MouseListener
         else if(e.getSource()==mf.b7)
         {
             cp.card.show(cp, "DETAIL");
+        }
+        else if(e.getSource()==mf.b5)
+        {
+            cp.card.show(cp, "BLIST");
         }
         
     }

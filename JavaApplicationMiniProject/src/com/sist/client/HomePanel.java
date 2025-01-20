@@ -51,7 +51,7 @@ implements MouseListener,ActionListener
         p.setBounds(20, 530, 550, 35);
         add(p);
         
-        String[] col= {"","업체명","평정"};
+        String[] col= {"","업체명","평점"};
         Object[][] row=new Object[0][3];
         model=new DefaultTableModel(row,col)
         {
