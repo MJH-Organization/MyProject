@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
+import java.text.*;
 
 import com.sist.vo.*;
 /*
@@ -28,6 +29,7 @@ public class NaverNewsSearch {
         
         newsSearchData(fd);
     }
+    
     public static List<NewsVO> newsSearchData(String fd)
     {
         List<NewsVO> list=new ArrayList<NewsVO>();
@@ -69,18 +71,38 @@ public class NaverNewsSearch {
                 JSONObject obj=(JSONObject)items.get(i);
                 //System.out.println(obj.toJSONString());
                 String title=(String)obj.get("title");
-                System.out.println(title);
+                //System.out.println(title);
                 String description=(String)obj.get("description");
-                System.out.println(description);
+                //System.out.println(description);
                 String link=(String)obj.get("link");
-                System.out.println(link);
+                //System.out.println(link);
                 String pubDate=(String)obj.get("pubDate");
-                System.out.println(pubDate);
-                // Tue, 21 Jan 2025 12:42:00 +0900
-                // 애기봉 주변 <b>맛집</b> 코스 개발과 관광객 유입을 통한 지역 경제 활성화 방안을 제시하며, 지역 특화 메뉴 개발과 주민 운영 사업 지원을 통해 지역의 정체성을 강화하겠다는 계획을 밝혔다. 이날 신년인사회 이후 김병수... 
+                //System.out.println(pubDate);
+                // Tue, 21 Jan 2025 12:42:00 +0900 => SmpleDateFormat 활용 변경
+                // 애기봉 주변 <b>맛집</b> 코스 개발과 관광객 유입을 통한 지역 경제 활성화 방안을 제시하며, 지역 특화 메뉴 개발과 주민 운영 사업 지원을 통해 지역의 정체성을 강화하겠다는 계획을 밝혔다. 이날 신년인사회 이후 김병수...
+                pubDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(pubDate));
+                //System.out.println(pubDate);
+                vo.setTitle(title);
+                vo.setDescription(description);
+                vo.setLink(link);
+                vo.setPubDate(pubDate);
+                list.add(vo);
             }
+            /*
+             *  1. 오라클 => 데이터베이스
+             *  2. HTML => Jsoup
+             *  3. XML => DocumentBuilder
+             *      => Spring / MyBatis => XML
+             *  4. JSON => Simple-JSON / Jackson
+             *     ---- 웹
+             *  자바스크립트 => VO, List
+             *              |    |
+             *             {}   []  => Ajax / Vue / React
+             *  => Number   
+             */
             
         }catch(Exception ex) {}
+        
         return list;
     }
 

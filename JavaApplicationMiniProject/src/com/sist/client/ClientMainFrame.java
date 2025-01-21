@@ -158,7 +158,7 @@ implements ActionListener,Runnable,MouseListener
             dispose();
             System.exit(0);
         }
-        else if(e.getSource()==login.b1) 
+        else if(e.getSource()==login.b1 || e.getSource()==login.pf) 
         {
             // 유효성 검사
             String id=login.tf.getText(); 
@@ -252,7 +252,7 @@ implements ActionListener,Runnable,MouseListener
         }
         else if(e.getSource()==mf.b7)
         {
-            cp.card.show(cp, "DETAIL");
+            cp.card.show(cp, "NP");
         }
         else if(e.getSource()==mf.b5)
         {
