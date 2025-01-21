@@ -1,16 +1,24 @@
 package com.sist.client;
 import java.awt.Font;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+
+import com.sist.dao.*;
+import com.sist.vo.*;
 // 고유번호(primary key) => 상세보기, 수정, 삭제, 답변
 // => hidden으로 감춰놓고 시작
-public class BoardDelete extends JPanel {
+public class BoardDelete extends JPanel 
+implements ActionListener
+{
     JLabel titleLa,la,noLa;
     JPasswordField pf;
     JButton b1,b2;
+    ControlPanel cp;
 
-    public BoardDelete()
+    public BoardDelete(ControlPanel cp)
     {
+        this.cp=cp;
         titleLa=new JLabel("삭제하기",JLabel.CENTER);// <table>
         titleLa.setFont(new Font("맑은 고딕",Font.BOLD,30)); //<h3></h3>
         setLayout(null);
@@ -39,7 +47,45 @@ public class BoardDelete extends JPanel {
         add(p);
         add(la);
         add(pf);
+        
+        b1.addActionListener(this);
+        b2.addActionListener(this);
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        if(e.getSource()==b2)
+        {
+            cp.card.show(cp, "BDETAIL");
+        }
+        else if(e.getSource()==b1)
+        {
+            String pwd=String.valueOf(pf.getPassword());
+            if(pwd.trim().length()<1)
+            {
+                pf.requestFocus();
+                return;
+            }
+            String no=noLa.getText();
+            // 오라클 연동
+            ReplyBoardDAO dao=ReplyBoardDAO.newInstance();
+            boolean bCheck=dao.replyDelete(Integer.parseInt(no), pwd);
+            if(bCheck==true)
+            {
+                //화면이동
+                cp.card.show(cp, "BLIST");
+                cp.bList.print();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "비밀번호가 틀립니다\n다시 입력하세요");
+                pf.setText("");
+                pf.requestFocus();
+            }
+        }
+        
     }
     
     

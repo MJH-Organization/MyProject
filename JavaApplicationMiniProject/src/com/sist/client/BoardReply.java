@@ -9,14 +9,36 @@ import com.sist.vo.*;
 // <html> => VO, DAO
 // JSP => DataBase : React/Vue/Ajax => DataBase 연동
 // 사용자 입력 => 오라클 저장 => 화면 이동(목록)
-public class BoardReply extends JPanel{
+public class BoardReply extends JPanel
+implements ActionListener
+{
     JLabel titleLa,nameLa,subLa,contLa,pwdLa,noLa;
     JTextField nameTf,subTf;
     JPasswordField pwdPf;
     JTextArea ta;
     JButton b1,b2;
     ControlPanel cp;
-    
+    /*
+     *      HTML/CSS/JavaScript
+     *      JSP
+     *      Spring
+     *      Python => Numpy / Pandas / 
+     *                ------------------------------
+     *                => 이산 수학
+     *      ElasticSearch
+     *      AWS
+     *      -----------------------
+     *      MyBatis / JPA
+     *      Spring-Boot
+     *      VueJS
+     *      React-Query / Redux / Next
+     *      MySQL
+     *      -----------------------
+     *          DevOps : 개발과 동시에 운영 (CI/CD)
+     *          ----------------------------- 도커 / 젠킨스
+     *          MSA : Spring Cloud
+     *          ---------------------------------- Flutter / Dart
+     */
     public BoardReply(ControlPanel cp)
     {
         this.cp=cp;
@@ -69,8 +91,62 @@ public class BoardReply extends JPanel{
         p.setBounds(100, 435, 535, 35);
         add(p);
         
-//        b1.addActionListener(this);    //글쓰기
-//        b2.addActionListener(this);    // 취소
+        b1.addActionListener(this);    // OnClick="함수"
+        b2.addActionListener(this);    // OnClick="함수"
+        /*
+         *  $('b1').clock(function(){}) JQuery
+         *  
+         *  $('b1').clock(function(){}) JQuery
+         */
         
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        if(e.getSource()==b2)
+        {
+            cp.card.show(cp, "BDETAIL");
+        }
+        else if(e.getSource()==b1)
+        {
+            String name=nameTf.getText();
+            // NOT NULL을 설정한 경우 => 반드시 입력 유도
+            if(name.trim().length()<1)
+            {
+                nameTf.requestFocus();
+                return;
+            }
+            String subject=subTf.getText();
+            if(subject.trim().length()<1)
+            {
+                subTf.requestFocus();
+                return;
+            }
+            String content=ta.getText();
+            if(content.trim().length()<1)
+            {
+                ta.requestFocus();
+                return;
+            }
+            String pwd=String.valueOf(pwdPf.getPassword());
+            if(pwd.trim().length()<1)
+            {
+                pwdPf.requestFocus();
+                return;
+            }
+            String no=noLa.getText();
+ 
+            //실제 수정
+            ReplyBoardVO vo=new ReplyBoardVO();
+            vo.setName(name);
+            vo.setSubject(subject);
+            vo.setContent(content);
+            vo.setPwd(pwd);
+            
+            ReplyBoardDAO dao=ReplyBoardDAO.newInstance();
+            dao.replyInsert(Integer.parseInt(no), vo);
+            cp.card.show(cp, "BLIST");
+            cp.bList.print();
+        }
     }
 }
