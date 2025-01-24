@@ -30,7 +30,7 @@ implements ActionListener,MouseListener
             cards[i]=new NewsCard();
         }
         pan=new JPanel();
-        pan.setLayout(new GridLayout(20,1,5,5));
+        pan.setLayout(new GridLayout(10,1,5,5));
         
         setLayout(null);
         
@@ -38,14 +38,26 @@ implements ActionListener,MouseListener
         b.setBounds(625, 15, 100, 30);
         add(tf);
         add(b);
-        pan.setPreferredSize(new Dimension(830, 1300));
+        pan.setPreferredSize(new Dimension(800,1200));
         pane=new JScrollPane(pan);
-        pane.setPreferredSize(new Dimension(800,650));
-        pane.setBounds(20, 55, 720, 650);
+        pane.setPreferredSize(new Dimension(780,700));
+        pane.setBounds(20, 55, 780, 550);
         add(pane);
         
         tf.addActionListener(this);
         b.addActionListener(this);
+        
+        clean();
+    }
+    
+    public void clean()
+    {
+        for(int i=cards.length-1;i<=0;i--)
+        {
+            cards[i].titleLa.setText("");
+            cards[i].contentTp.setText("");
+            cards[i].dateLa.setText("");
+        }
     }
 
     public void newsPrint(String fd)

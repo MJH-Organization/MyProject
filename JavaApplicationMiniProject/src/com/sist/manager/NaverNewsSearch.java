@@ -71,7 +71,7 @@ public class NaverNewsSearch {
                 JSONObject obj=(JSONObject)items.get(i);
                 //System.out.println(obj.toJSONString());
                 String title=(String)obj.get("title");
-                //System.out.println(title);
+                System.out.println(title);
                 String description=(String)obj.get("description");
                 //System.out.println(description);
                 String link=(String)obj.get("link");
