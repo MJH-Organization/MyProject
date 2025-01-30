@@ -1,7 +1,11 @@
 package com.sist.dao;
+import com.sist.vo.*;
 import java.sql.*;
 import java.util.*;
-import com.sist.vo.*;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class FoodDAO {
     private Connection conn;
@@ -76,8 +80,6 @@ public class FoodDAO {
               while(rs.next())
               {
                   FoodVO vo=new FoodVO();
-                  vo.
-                  
                   vo.setFno(rs.getInt(1));
                   vo.setName(rs.getString(2));
                   vo.setPoster("http://menupan.com"+rs.getString(3));
@@ -318,6 +320,40 @@ public class FoodDAO {
               disConnection();
           }
           return vo;
+      }
+      
+      public void insertFoodData(FoodVO vo)
+      {
+    	  try
+    	  {
+            		  getConnection();
+            		  String sql="INSERT INTO FOOD_MENUPAN VALUES("
+            				  +"(SELECT NVL(MAX(fno)+1,1) FROM FOOD_MENUPAN),"
+            				  +"?,?,?,?,?,?,?,?,?,?,?,0,?)";
+            		  //conn.setAutoCommit(false);
+            		  ps=conn.prepareStatement(sql);
+            		  
+            		  ps.setString(1,vo.getName());
+            		  ps.setString(2,vo.getType());
+            		  ps.setString(3,vo.getPhone());
+            		  ps.setString(4,vo.getAddress());
+            		  ps.setDouble(5,vo.getScore());
+            		  ps.setString(6,vo.getTheme());
+            		  ps.setString(7,vo.getPoster());
+            		  ps.setString(8,vo.getImages());
+            		  ps.setString(9,vo.getTime());
+            		  ps.setString(10,vo.getParking());
+            		  ps.setString(11,vo.getContent());
+            		  ps.setString(12,vo.getPrice());
+            		  ps.executeUpdate();
+    	  }catch(Exception ex)
+    	  {
+    		  ex.printStackTrace();
+    	  }
+    	  finally
+    	  {
+    		  disConnection();  
+    	  }
       }
       
 
